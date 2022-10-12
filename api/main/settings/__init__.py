@@ -3,7 +3,7 @@ from decouple import config
 env = config('ENVIRONMENT', default='DEV')
 
 if env == 'PROD':
-    print('Production environment')
+    print('Using Production environment')
     from .production import *
 else:
     print('Using development settings')

@@ -5,34 +5,24 @@ from rest_framework.exceptions import ValidationError, PermissionDenied
 from rest_framework import status
 from rest_framework.response import Response
 
-from viewset_mixin import ModelViewSet
 from exception.exceptions import InvalidCategoryError
 
-from .models import Movie, TvShow, Game
-from .serializers import MovieSerializer, TvShowSerializer, GameSerializer
-from authentication.jwt import AnnonymousUserAuth
+from movie.models import Movie
+from movie.serializers import MovieSerializer
+from tvshow.models import TvShow
+from tvshow.serializers import TvShowSerializer
+from game.models import Game
+from game.serializers import GameSerializer
+from share.filter import ShareFilterBackend
 
+from authentication.jwt import AnnonymousUserAuth
 
 User = get_user_model()
 
 
-class MovieViewSet(ModelViewSet):
-    model_class = Movie
-    serializer_class = MovieSerializer
-
-
-class TvShowViewSet(ModelViewSet):
-    model_class = TvShow
-    serializer_class = TvShowSerializer
-
-
-class GameViewSet(ModelViewSet):
-    model_class = Game
-    serializer_class = GameSerializer
-
-
 class ShareListView(GenericViewSet):
     authentication_classes = (AnnonymousUserAuth,)
+    filter_backends = [ShareFilterBackend]
 
     def get_serializer_class(self, *args, **kwargs):
         category = kwargs.get('category')
@@ -69,11 +59,13 @@ class ShareListView(GenericViewSet):
 
         if request.user.id != user_id:
             self.check_user_permission(request, user, category)
-        queryset = self.get_queryset(category)
+        queryset = self.filter_queryset(
+            self.get_queryset(category, user=user))
         serializer = serializer_class(queryset, many=True)
 
         response = {
             "success": True,
+            "message": "Data successfully retrieved.",
             "data": serializer.data
         }
         return Response(response, status.HTTP_200_OK)

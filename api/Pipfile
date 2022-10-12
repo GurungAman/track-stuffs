@@ -11,6 +11,7 @@ django-cors-headers = "*"
 drf-yasg = "*"
 python-decouple = "*"
 psycopg2 = "*"
+django-filter = "*"
 
 [dev-packages]
 autopep8 = "*"

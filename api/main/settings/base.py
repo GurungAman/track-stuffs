@@ -40,10 +40,13 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'rest_framework',
+    'django_filters',
 
     # apps
     'authentication',
-    'categories'
+    'movie',
+    'tvshow',
+    'game',
 ]
 
 MIDDLEWARE = [
@@ -136,6 +139,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     'EXCEPTION_HANDLER': 'exception.exception_handler.custom_exception_handler',
 }
 

@@ -22,9 +22,9 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="project_name API",
+        title="Track stuffs API",
         default_version='v1',
-        description="API for  ",
+        description="API for track stuffs ",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="email"),
         license=openapi.License(name="BSD License"),
@@ -33,10 +33,15 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
     authentication_classes=[]
 )
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('authentication.urls')),
-    path('api/category/', include('categories.urls')),
+    path('api/category/', include('movie.urls')),
+    path('api/category/', include('tvshow.urls')),
+    path('api/category/', include('game.urls')),
+    path('api/', include('share.urls')),
+
 
     path('api/docs/', schema_view.with_ui('swagger',
          cache_timeout=0), name='schema-swagger-ui'),

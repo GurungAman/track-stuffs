@@ -1,4 +1,4 @@
-from rest_framework import status, filters
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.viewsets import GenericViewSet
@@ -7,11 +7,9 @@ from rest_framework.viewsets import GenericViewSet
 class ModelViewSet(GenericViewSet):
     serializer_class = None
     model_class = None
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name', 'status')
 
     def get_queryset(self):
-        return self.model_class.objects.all()
+        return self.model_class.objects.filter(user=self.request.user)
 
     def get_object(self, id):
         object = self.model_class.objects.filter(pk=id).first()
@@ -33,9 +31,7 @@ class ModelViewSet(GenericViewSet):
         return Response(response, status.HTTP_201_CREATED)
 
     def list(self, request):
-
-        queryset = self.get_queryset().filter(
-            user=request.user)
+        queryset = self.filter_queryset(self.get_queryset())
         if not queryset:
             response = {
                 "success": True,
