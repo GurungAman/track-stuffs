@@ -7,4 +7,5 @@ Inspired from myanimelist.
 
 - implement SSO
 - some more basic auth operations like changing and resetting password
+- add user registration.
 - start with frontend work !!
